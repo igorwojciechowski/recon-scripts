@@ -1,3 +1,4 @@
+#!/bin/bash
 # --- 
 # Searches crt.sh by specified query and retrives found urls without duplicates
 # ---
