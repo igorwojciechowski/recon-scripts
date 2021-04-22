@@ -24,8 +24,6 @@ do
       target="https://$hostname"
     elif [ $port = 80 ] ; then
       target="http://$hostname"
-    else
-      target="http://$hostname:$port"
     fi
     ffuf -u "$target/FUZZ" -r -w "$1" -of html -o "$2$hostname:$port.html" -or | tee "$2$hostname:$port.txt"
 done
