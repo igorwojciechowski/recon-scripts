@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import sys
 import xml.etree.ElementTree as et
 
@@ -10,9 +10,10 @@ root = et.parse(sys.argv[1]).getroot()
 hosts = root.findall('host')
 for host in hosts:
     for port in host.find('ports').findall('port'):
-        print("{url}\t{port}\t{protocol}\t{state}".format(
+        print("{url}\t{port}\t{protocol}\t{state}\t{service}".format(
             url=host.find('hostnames').find('hostname').attrib['name'],
             port=port.attrib['portid'],
             protocol=port.attrib['protocol'],
-            state=port.find('state').attrib['state']
+            state=port.find('state').attrib['state'],
+            service=port.find('service').attrib['name']
         ))
