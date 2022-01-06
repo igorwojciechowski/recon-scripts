@@ -7,6 +7,7 @@ import time
 
 BINARIES = [
     "python3",
+    "aquatone",
     "amass",
     "httpx",
     "waybackurls"

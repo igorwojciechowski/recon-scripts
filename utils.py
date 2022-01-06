@@ -28,7 +28,8 @@ def make_domain_dir_structure(domain: str) -> None:
         a = r.copy()
         a.reverse()
         path = Path(f"{'/'.join(r)}/{'.'.join(a)}")
-        path.mkdir(parents=True)
+        if not os.path.exists(path):
+            path.mkdir(parents=True)
 
 
 def get_directory_path(directory: str) -> str:
