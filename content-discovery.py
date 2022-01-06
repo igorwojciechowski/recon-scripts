@@ -39,9 +39,10 @@ if __name__ == '__main__':
     with Pool(THREADS) as pool:
         for url in urls:
             STARTED = datetime.now().strftime("%d-%m-%Y-%H-%M-%S")
-            domain = re.search(r'(?<=://)(.*)', url).group(0)
-            output_file = f'{domain}/content-discovery-{STARTED}.json'
-            utils.mkdirs(output_file)
+            domain = re.search(r'([A-z0-9-_.]*)$', url).group(0)
+            utils.make_domain_dir_structure(domain)
+            directory = utils.get_directory_path(domain)
+            output_file = f'{directory}/gobuster-{STARTED}.txt'
             result = pool.apply_async(enumerate_content, args=(url, WORDLIST, output_file))
             results.append(result)
         [result.wait() for result in results]

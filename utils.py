@@ -1,6 +1,9 @@
+from typing import Optional
 import psutil
 import time
 import os
+from pathlib import Path
+
 
 def wait_for_process(pid: int) -> None:
     """
@@ -10,11 +13,29 @@ def wait_for_process(pid: int) -> None:
     while pid in psutil.pids() and psutil.Process(pid).status() != psutil.STATUS_ZOMBIE:
         time.sleep(0.5)
 
-def mkdirs(path: str) -> None:
-    directories = os.path.dirname(path)
-    if not os.path.exists(directories):
-        os.makedirs(directories)
 
-def mkdir(directory: str) -> None:
-    if not os.path.exists(directory):
-        os.mkdir(directory)
+def make_domain_dir_structure(domain: str) -> None:
+    """
+    Creates durectory structure for a given domain, e.g.: `com/test1/test2/test2.test1.com/`
+    for `test2.test1.com` domain
+    """
+    subs = domain.split('.')
+    subs.reverse()
+    r = []
+    for subdomain in subs:
+        r.append(subdomain)
+        if len(r) == 1:
+            continue
+        a = r.copy()
+        a.reverse()
+        path = Path(f"{'/'.join(r)}/{'.'.join(a)}")
+        path.mkdir(parents=True)
+
+
+def get_directory_path(directory: str) -> Optional(str):
+    """
+    Return
+    """
+    for root, dirs, files in os.walk('.'):
+        if directory in dirs:
+            return f"{root}/{directory}"
