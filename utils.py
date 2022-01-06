@@ -1,4 +1,3 @@
-from typing import Optional
 import psutil
 import time
 import os
@@ -32,7 +31,7 @@ def make_domain_dir_structure(domain: str) -> None:
         path.mkdir(parents=True)
 
 
-def get_directory_path(directory: str) -> Optional(str):
+def get_directory_path(directory: str) -> str:
     """
     Returns relative path of a found directory
     """
