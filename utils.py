@@ -34,7 +34,7 @@ def make_domain_dir_structure(domain: str) -> None:
 
 def get_directory_path(directory: str) -> Optional(str):
     """
-    Return
+    Returns relative path of a found directory
     """
     for root, dirs, files in os.walk('.'):
         if directory in dirs:
