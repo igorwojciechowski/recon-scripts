@@ -27,6 +27,7 @@ if sys.argv[1] not in COMMANDS:
 COMMAND = sys.argv[1]
 OPTIONS = [option for option in sys.argv[2:]]
 
+
 def show():
     """
     Displays running processes in 5 seconds intervals.
@@ -35,17 +36,22 @@ def show():
         try:
             os.system("clear")
             sys.stdout.flush()
-            print(f"\033[1;32;40mCurrently running processes: {len([p for p in psutil.process_iter() if p.name() in BINARIES])}\n")
+            print(
+                f"\033[1;32;40mCurrently running processes: {len([p for p in psutil.process_iter() if p.name() in BINARIES])}\n")
             for binary in BINARIES:
-                processes = [process for process in psutil.process_iter() if process.name() == binary]
+                processes = [
+                    process for process in psutil.process_iter() if process.name() == binary]
                 if processes:
                     print(f"\033[1;36;40m {binary}")
+                    print(
+                        f"\033[1;34;40m\t{' PID':5}\t{' CPU':5}\t{' RAM':5}\t{' command':50}")
                 for process in processes:
-                    print(f"\033[0;32;40m\t{process.pid:5}\t{' '.join(process.cmdline()):50}")
+                    print(
+                        f"\033[0;32;40m\t{process.pid:5}\t{str(process.cpu_percent())+'%':5}\t{str(process.memory_percent())[:3]+'%':5}\t{' '.join(process.cmdline()):50}")
             time.sleep(5)
         except KeyboardInterrupt:
             sys.exit()
 
+
 if COMMAND == "show":
     show()
-
