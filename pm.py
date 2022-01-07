@@ -9,6 +9,7 @@ BINARIES = [
     "python3",
     "aquatone",
     "amass",
+    "gobuster",
     "httpx",
     "waybackurls"
 ]
@@ -42,7 +43,7 @@ def show():
                 processes = [
                     process for process in psutil.process_iter() if process.name() == binary]
                 if processes:
-                    print(f"\033[1;36;40m {binary}")
+                    print(f"\033[1;36;40m {binary} ({len(processes)})")
                     print(
                         f"\033[1;34;40m\t{' PID':5}\t{' CPU':5}\t{' RAM':5}\t{' command':50}")
                 for process in processes:
