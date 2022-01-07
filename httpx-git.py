@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import sys
+import argparse
 import subprocess
 from datetime import datetime
 
@@ -10,17 +10,19 @@ def probe(urls: str, output_file: str):
     """
     p = subprocess.Popen(['httpx', '-sc', '-cl', '-nc'],
                      stdin=subprocess.PIPE,
+                     stderr=subprocess.DEVNULL,
                      stdout=open(output_file, 'a'))
-    p.communicate(input='\n'.join(urls).encode())              
+    p.communicate(input='\n'.join(urls).encode())
+    p.wait()            
 
 
 if __name__ == '__main__':
 
-    if len(sys.argv) < 2:
-        print("No domain provided")
-        sys.exit(1)
+    ARG_PARSER = argparse.ArgumentParser()
+    ARG_PARSER.add_argument('-u', '--urls', type=str, required=True)
+    ARGS = ARG_PARSER.parse_args()
 
-    ULRS_FILE = sys.argv[1]
+    ULRS_FILE = ARGS.urls
     DATE = datetime.now().strftime("%d-%m-%Y-%H-%M-%S")
     OUTPUT_FILE = f"probe-git-{DATE}.txt"
 
