@@ -40,6 +40,8 @@ if __name__ == '__main__':
                             help="wordlist", required=True)
     ARG_PARSER.add_argument('-c', '--concurrency', type=int,
                             default=5, help="Number of max parallel httpx processes")
+    ARG_PARSER.add_argument('-si', '--start_index', type=int, default=0, help="Start index")
+    ARG_PARSER.add_argument('-ei', '--end_index', type=int)
     ARGS = ARG_PARSER.parse_args()
 
     URLS_FILE = ARGS.urls
@@ -50,8 +52,11 @@ if __name__ == '__main__':
     words = []
     results = []
 
+    
     with open(URLS_FILE, 'r') as _file:
-        urls = [_.replace("\n", "") for _ in _file.readlines()]
+        START_INDEX = ARGS.start_index
+        END_INDEX = ARGS.end_index if ARGS.end_index else len(_file.readlines())
+        urls = [_.replace("\n", "") for _ in _file.readlines()[START_INDEX:END_INDEX]]
 
     with open(WORDLIST, 'r') as _file:
         words = [_.replace("\n", "") for _ in _file.readlines()]
