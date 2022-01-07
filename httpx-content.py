@@ -8,7 +8,7 @@ import argparse
 
 
 def enumerate_content(urls: list, output_file: str) -> None:
-    proc = subprocess.Popen(["httpx", "-sc", "-cl", "-nc"],
+    proc = subprocess.Popen(["httpx", "-sc", "-cl", "-nc", "-retries", "0", "-fc", "404"],
                             stdin=subprocess.PIPE,
                             stderr=subprocess.DEVNULL,
                             stdout=open(output_file, 'a'))

@@ -8,7 +8,7 @@ def probe(urls: str, output_file: str):
     """
     Probe subdomains with httpx
     """
-    p = subprocess.Popen(['httpx', '-sc', '-cl', '-nc'],
+    p = subprocess.Popen(['httpx', '-sc', '-cl', '-nc', '-fc', '403'],
                      stdin=subprocess.PIPE,
                      stderr=subprocess.DEVNULL,
                      stdout=open(output_file, 'a'))
