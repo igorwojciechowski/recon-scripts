@@ -4,14 +4,21 @@ import subprocess
 from datetime import datetime
 
 
-def probe(subdomains_file: str, output_file: str):
+def probe(subdomains_file: str):
     """
     Probe subdomains with httpx
     """
-    p = subprocess.Popen(['httpx', '-l', subdomains_file, '-probe', '-p', '80,443,8000,8080', '-nc'],
+    p = subprocess.Popen(['httpx', '-l', subdomains_file, '-probe', '-p', '80,443,8000,8080', '-nc', '-sc', '-cl'],
                          stderr=subprocess.DEVNULL,
-                         stdout=open(output_file, 'a'))
+                         stdout=subprocess.PIPE)
     p.wait()
+    return p.stdout
+
+
+def outputToFile(output_file: str, data: list):
+    with open(output_file, 'a') as _file:
+        _file.write(''.join(data))
+
 
 
 if __name__ == '__main__':
@@ -24,4 +31,8 @@ if __name__ == '__main__':
     DATE = datetime.now().strftime("%d-%m-%Y-%H-%M-%S")
     OUTPUT_FILE = f"probe-{DATE}.txt"
 
-    probe(DOMAINS, OUTPUT_FILE)
+    stdout = probe(DOMAINS)
+    output = [_.decode() for _ in stdout.readlines()]
+
+    
+
