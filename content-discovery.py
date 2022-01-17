@@ -9,6 +9,7 @@ import argparse
 
 resume_file = './websearch-resume.cfg'
 
+
 def enumerate_content(url: str, wordlist: str, output_file: str) -> None:
     proc = subprocess.Popen(["websearch", "-u", url, "-w", wordlist],
                             stdin=subprocess.PIPE,

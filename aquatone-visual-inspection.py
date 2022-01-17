@@ -15,14 +15,14 @@ def aquatone(urls: str, output_directory: str):
 
 if __name__ == '__main__':
 
-    ARG_PARSER = argparse.ArgumentParser()
-    ARG_PARSER.add_argument('-u', '--urls', type=str, required=True)
-    ARGS = ARG_PARSER.parse_args()
+    arg_parser = argparse.ArgumentParser()
+    arg_parser.add_argument('-u', '--urls', type=str, required=True)
+    args = arg_parser.parse_args()
 
-    ULRS_FILE = ARGS.urls
-    DATE = datetime.now().strftime("%d-%m-%Y-%H-%M-%S")
-    OUTPUT_DIRECTORY = f"aquatone-{DATE}"
+    urls_file = args.urls
+    date = datetime.now().strftime("%d-%m-%Y-%H-%M-%S")
+    output_directory = f"aquatone-{date}"
 
-    with open(ULRS_FILE, 'r') as _file:
+    with open(urls_file, 'r') as _file:
         payload = [_.replace("\n", "") for _ in _file.readlines()]
-    aquatone(payload, OUTPUT_DIRECTORY)
+    aquatone(payload, output_directory)

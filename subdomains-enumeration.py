@@ -58,23 +58,23 @@ if __name__ == '__main__':
         print("No domain provided")
         sys.exit(1)
 
-    DOMAIN = sys.argv[1]
-    MANAGER = Manager()
-    SHARED_DICT = MANAGER.dict()
+    domain = sys.argv[1]
+    manager = Manager()
+    shared_dict = manager.dict()
 
     started = datetime.now().strftime("%d-%m-%Y-%H-%M-%S")
 
-    amass_output = f"amass-{DOMAIN}-{started}.txt"
-    waybackurls_output = f"waybackurls-{DOMAIN}-{started}.txt"
-    grepped_subdomains_output = f"waybackurls-domains-{DOMAIN}-{started}.txt"
-    domains_output = f"subdomains-{DOMAIN}-{started}.txt"
+    amass_output = f"amass-{domain}-{started}.txt"
+    waybackurls_output = f"waybackurls-{domain}-{started}.txt"
+    grepped_subdomains_output = f"waybackurls-domains-{domain}-{started}.txt"
+    domains_output = f"subdomains-{domain}-{started}.txt"
 
     stage_1_job = multiprocessing.Process(
-        target=stage_1, args=(SHARED_DICT, DOMAIN, amass_output))
+        target=stage_1, args=(shared_dict, domain, amass_output))
     stage_2_job = multiprocessing.Process(
-        target=stage_2, args=(SHARED_DICT, DOMAIN, waybackurls_output))
+        target=stage_2, args=(shared_dict, domain, waybackurls_output))
     stage_3_job = multiprocessing.Process(target=stage_3, args=(
-        SHARED_DICT, DOMAIN, waybackurls_output, grepped_subdomains_output))
+        shared_dict, domain, waybackurls_output, grepped_subdomains_output))
     stage_4_job = multiprocessing.Process(
         target=stage_4, args=([amass_output, grepped_subdomains_output], domains_output))
 
@@ -82,10 +82,10 @@ if __name__ == '__main__':
     stage_1_job.join()
     stage_2_job.start()
     stage_2_job.join()
-    wait_for_process(SHARED_DICT['stage_2'])
+    wait_for_process(shared_dict['stage_2'])
     stage_3_job.start()
     stage_3_job.join()
-    wait_for_process(SHARED_DICT['stage_1'])
-    wait_for_process(SHARED_DICT['stage_3'])
+    wait_for_process(shared_dict['stage_1'])
+    wait_for_process(shared_dict['stage_3'])
     stage_4_job.start()
     stage_4_job.join()
