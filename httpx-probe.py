@@ -4,35 +4,23 @@ import subprocess
 from datetime import datetime
 
 
-def probe(subdomains_file: str):
+def probe(subdomains_file: str, output: str):
     """
     Probe subdomains with httpx
     """
-    p = subprocess.Popen(['httpx', '-l', subdomains_file, '-probe', '-p', '80,443,8000,8080', '-nc', '-sc', '-cl'],
+    p = subprocess.Popen(['httpx', '-l', subdomains_file, '-probe', '-p', '80,443,8000,8080', '-nc', '-sc', '-cl', '-retries', '0'],
                          stderr=subprocess.DEVNULL,
-                         stdout=subprocess.PIPE)
+                         stdout=open(output, 'a'))
     p.wait()
-    return p.stdout
-
-
-def outputToFile(output_file: str, data: list):
-    with open(output_file, 'a') as _file:
-        _file.write(''.join(data))
-
 
 
 if __name__ == '__main__':
+    arg_parser = argparse.ArgumentParser()
+    arg_parser.add_argument('-d', '--domains', type=str, required=True)
+    args = arg_parser.parse_args()
 
-    ARG_PARSER = argparse.ArgumentParser()
-    ARG_PARSER.add_argument('-d', '--domains', type=str, required=True)
-    ARGS = ARG_PARSER.parse_args()
+    domains = args.domains
+    date = datetime.now().strftime("%d-%m-%Y-%H-%M-%S")
+    output_file = f"probe-{date}.txt"
 
-    DOMAINS = ARGS.domains
-    DATE = datetime.now().strftime("%d-%m-%Y-%H-%M-%S")
-    OUTPUT_FILE = f"probe-{DATE}.txt"
-
-    stdout = probe(DOMAINS)
-    output = [_.decode() for _ in stdout.readlines()]
-
-    
-
+    probe(domains, output_file)

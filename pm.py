@@ -7,10 +7,12 @@ import time
 
 BINARIES = [
     "python3",
-    "aquatone",
+    "altdns",
     "amass",
+    "aquatone",
     "gobuster",
     "httpx",
+    "subjack",
     "waybackurls"
 ]
 
@@ -49,7 +51,7 @@ def show():
                 for process in processes:
                     print(
                         f"\033[0;32;40m\t{process.pid:5}\t{str(process.cpu_percent())+'%':5}\t{str(process.memory_percent())[:3]+'%':5}\t{' '.join(process.cmdline()):50}")
-            time.sleep(5)
+            time.sleep(1)
         except KeyboardInterrupt:
             sys.exit()
 
