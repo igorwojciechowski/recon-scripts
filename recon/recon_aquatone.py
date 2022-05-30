@@ -13,8 +13,7 @@ def aquatone(urls: str, output_directory: str):
     p.wait()
 
 
-if __name__ == '__main__':
-
+def main():
     arg_parser = argparse.ArgumentParser()
     arg_parser.add_argument('-u', '--urls', type=str, required=True)
     args = arg_parser.parse_args()
@@ -26,3 +25,7 @@ if __name__ == '__main__':
     with open(urls_file, 'r') as _file:
         payload = [_.replace("\n", "") for _ in _file.readlines()]
     aquatone(payload, output_directory)
+
+
+if __name__ == '__main__':
+    main()

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import sys
 import os
-import utils
+import recon.utils.utils as utils
 
 
 if len(sys.argv) < 2:

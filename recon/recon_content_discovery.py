@@ -2,7 +2,7 @@
 import subprocess
 from datetime import datetime
 from multiprocessing import Pool
-import utils
+import recon.utils.utils as utils
 import os
 import argparse
 
@@ -39,8 +39,7 @@ def load():
     with open(resume_file, 'r') as _file:
         return int(_file.readlines()[1])
 
-
-if __name__ == '__main__':
+def main():
     arg_parser = argparse.ArgumentParser()
     arg_parser.add_argument('-u', '--urls', type=str, required=True)
     arg_parser.add_argument('-w', '--wordlist', type=str,
@@ -81,3 +80,7 @@ if __name__ == '__main__':
             results.append(result)
             save(url, index)
         [result.wait() for result in results]
+
+
+if __name__ == '__main__':
+    main()
