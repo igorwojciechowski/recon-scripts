@@ -1,4 +1,3 @@
-from importlib.metadata import entry_points
 from setuptools import setup
 
 
@@ -19,7 +18,7 @@ setup(
         'console_scripts': [
             'recon_aquatone=recon.recon_aquatone:main',
             'recon_content_discovery=recon.recon_content_discovery:main',
-            'recon_httpx=recon.recon_httpx:main',
+            'recon_probe=recon.recon_probe:main',
             'recon_subenum=recon.recon_subenum:main'
         ]
     }
