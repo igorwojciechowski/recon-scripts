@@ -45,7 +45,7 @@ def merge_domains_lists(shared_dict, input_files: list, output: str):
     with open(output, 'w') as file:
         file.write('\n'.join(domains))
     shared_dict[RESULTS] = domains
-    
+
 
 def enumerate_subdomains(domain):
     manager = Manager()
@@ -57,33 +57,39 @@ def enumerate_subdomains(domain):
     grepped_subdomains_output = f"waybackurls-domains-{domain}-{started}.txt"
     domains_output = f"subdomains-{domain}-{started}.txt"
 
-    stage_1_job = multiprocessing.Process(
+    amass_task = multiprocessing.Process(
         target=run_amass, args=(shared_dict, domain, amass_output))
-    stage_2_job = multiprocessing.Process(
+    waybackurls_task = multiprocessing.Process(
         target=run_waybackurls, args=(shared_dict, domain, waybackurls_output))
-    stage_3_job = multiprocessing.Process(target=grep_domains, args=(
+    grep_domains_task = multiprocessing.Process(target=grep_domains, args=(
         shared_dict, domain, waybackurls_output, grepped_subdomains_output))
-    stage_4_job = multiprocessing.Process(
+    merge_domains_lists_task = multiprocessing.Process(
         target=merge_domains_lists, args=(shared_dict, [amass_output, grepped_subdomains_output], domains_output))
 
-    stage_1_job.start()
-    stage_1_job.join()
-    stage_2_job.start()
-    stage_2_job.join()
+    amass_task.start()
+    amass_task.join()
+
+    waybackurls_task.start()
+    waybackurls_task.join()
+
     wait_for_process(shared_dict[STAGE_2])
-    stage_3_job.start()
-    stage_3_job.join()
+    grep_domains_task.start()
+    grep_domains_task.join()
+
     wait_for_process(shared_dict[STAGE_1])
     wait_for_process(shared_dict[STAGE_3])
-    stage_4_job.start()
-    stage_4_job.join()
+    merge_domains_lists_task.start()
+    merge_domains_lists_task.join()
+
     return shared_dict[RESULTS]
 
 
 def main():
     arg_parser = argparse.ArgumentParser()
-    arg_parser.add_argument('-d', '--domains', help="Single domain or path to file", type=str, required=True)
-    arg_parser.add_argument('-t', '--threads', help="Number of concurrent threads", type=int, default=5)
+    arg_parser.add_argument(
+        '-d', '--domains', help="Single domain or path to file", type=str, required=True)
+    arg_parser.add_argument(
+        '-t', '--threads', help="Number of concurrent threads", type=int, default=5)
     arg_parser.add_argument('-o', '--output', help="Output file", type=str)
     args = arg_parser.parse_args()
 
@@ -109,4 +115,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-    
